@@ -14,11 +14,11 @@ import org.slf4j.LoggerFactory;
  * To execute the class you need to create a Topic "demo_java" you can crete it with the next command line:
  *  kafka-topics.sh --bootstrap-server 127.0.0.1:9092 --create --topic demo_java --partitions 3 --replication-factor 1
  *
- *  Remeber that after use the producer  (KafkaProducer) you need to flush and close it.
+ *  Remember that after use the producer  (KafkaProducer) you need to flush and close it.
  */
 public class ProducerDemo {
 
-    //A Loggger is create to log all the messages to the log/console
+    //A Logger is created to log all the messages to the log/console
     private static final Logger log = LoggerFactory.getLogger(ProducerDemo.class.getSimpleName());
 
     public static void main(String[] args) {
@@ -28,7 +28,6 @@ public class ProducerDemo {
         Properties properties = new Properties();
         // This property is to indicate where kafka broker is started - (--bootstrap localhost:9092)
         properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"127.0.0.1:9092");
-
         /*
             The next two properties are used to transform the java objects into binary for Kafka
             -We use the StringSerializer.class.getName() as a key serializer

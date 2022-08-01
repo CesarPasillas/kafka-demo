@@ -1,6 +1,8 @@
 package com.pasnys.demo.kafka.producer;
 
-import org.apache.kafka.clients.producer.*;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,12 +15,12 @@ import java.util.Properties;
  * To execute the class you need to create a Topic "demo_java" you can crete it with the next command line:
  *  kafka-topics.sh --bootstrap-server 127.0.0.1:9092 --create --topic demo_java --partitions 3 --replication-factor 1
  *
- *  Remeber that after use the producer  (KafkaProducer) you need to flush and close it.
+ *  Remember that after use the producer  (KafkaProducer) you need to flush and close it.
  */
-public class ProducerCallbacksDemo {
+public class ProducerwithKeysDemo {
 
     //A Loggger is create to log all the messages to the log/console
-    private static final Logger log = LoggerFactory.getLogger(ProducerCallbacksDemo.class.getSimpleName());
+    private static final Logger log = LoggerFactory.getLogger(ProducerwithKeysDemo.class.getSimpleName());
 
     public static void main(String[] args) {
         log.info("I am a Kafka Producer with Callback");
@@ -44,10 +46,15 @@ public class ProducerCallbacksDemo {
         //To test the callback we will send several messages using a for loop
         for (int i = 0; i < 10; i++){
 
+            //We will create the keys for our producer
+            String topic = "demo_java";
+            String value = "hello world! : " + i;
+            String key = "id_" + i;
+
             //Create a producer record, this class Allows sending data to Kafka Topic
             //for the example we use the topic name : "demo_java" and the message : "hello World"
             //You need to create the Topic before to tun this Class
-            ProducerRecord<String, String> producerRecord = new ProducerRecord<>("demo_java", "!hello World : " + i);
+            ProducerRecord<String, String> producerRecord = new ProducerRecord<>(topic, key, value);
 
             //Send data - asynchronous
             // the callback is sent here
@@ -62,6 +69,7 @@ public class ProducerCallbacksDemo {
                             // The log displays the metadata of the message if we run the class we can see how the partition changes
                             log.info("Received new Metadata: \n" +
                                     "Topic: " + metadata.topic() + "\n" +
+                                    "key:" + producerRecord.key() + "\n" +
                                     "Partition: " + metadata.partition() + "\n" +
                                     "Offset: " + metadata.offset() + "\n" +
                                     "Timestamp: " + metadata.timestamp());

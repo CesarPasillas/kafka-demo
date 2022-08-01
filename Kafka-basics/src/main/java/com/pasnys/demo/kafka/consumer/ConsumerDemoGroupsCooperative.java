@@ -1,9 +1,6 @@
 package com.pasnys.demo.kafka.consumer;
 
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.errors.WakeupException;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
@@ -30,10 +27,10 @@ import java.util.Properties;
  *
  *
  */
-public class ConsumerDemoGroupsPartitionsRebalance {
+public class ConsumerDemoGroupsCooperative {
 
     //A Logger is created to log all the messages to the log/console
-    private static final Logger log = LoggerFactory.getLogger(ConsumerDemoGroupsPartitionsRebalance.class.getSimpleName());
+    private static final Logger log = LoggerFactory.getLogger(ConsumerDemoGroupsCooperative.class.getSimpleName());
 
 
     public static void main(String[] args) {
@@ -66,6 +63,12 @@ public class ConsumerDemoGroupsPartitionsRebalance {
          * none: if not previous offset are found then even do not start
          */
         pro.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+
+        //add a partition Strategy we use the property with the value, with this property we are forcing our consumer to go only in cooperative mode.
+        pro.setProperty(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, CooperativeStickyAssignor.class.getName());
+
+        //If you need to set up a group instance ID, for the value you can use the value that you want, but you have a different value for all your consumers
+        //pro.setProperty(ConsumerConfig.GROUP_INSTANCE_ID_CONFIG, CooperativeStickyAssignor.class.getName());
 
         //Create the kafka Consumer with the properties
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(pro);

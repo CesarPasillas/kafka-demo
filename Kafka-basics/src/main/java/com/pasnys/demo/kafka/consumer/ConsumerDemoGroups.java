@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Properties;
 
 /**
@@ -22,11 +21,16 @@ import java.util.Properties;
  *  kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic demo_java --group my-third-application
  *
  *  With this consumer we expect a "Process finished with exit code 1"
+ *
+ *  For this class we nedd an extra configuration that allows to run several instances from our ConsumerDemoGroup at time
+ *  other way this demo will not work
+ *  Go to Select Run/debug Configuration > Edit configuration > select the Class ro edit the run configuration (ConsumerDemoGroups)
+ *  > modify options > select allow multiple instances > click on Apply button
  */
-public class ConsumerDemoWithGracefullyShutDown {
+public class ConsumerDemoGroups {
 
     //A Logger is created to log all the messages to the log/console
-    private static final Logger log = LoggerFactory.getLogger(ConsumerDemoWithGracefullyShutDown.class.getSimpleName());
+    private static final Logger log = LoggerFactory.getLogger(ConsumerDemoGroups.class.getSimpleName());
 
 
     public static void main(String[] args) {
@@ -97,7 +101,6 @@ public class ConsumerDemoWithGracefullyShutDown {
             //Now we will poll for new data
             while(true){
 
-                log.info("Polling  The data");
             /*In this line we indicate poll kafka and gets as many records as you can, but if you don't have any
                 replay from Kafka, then I will wait up to 100 milliseconds to get some records.
 
